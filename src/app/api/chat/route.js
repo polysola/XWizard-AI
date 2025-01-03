@@ -5,7 +5,6 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// Tăng timeout limit cho Edge Runtime
 export const runtime = 'edge';
 
 export async function POST(req) {
@@ -14,9 +13,8 @@ export async function POST(req) {
     const { message, type = "text" } = body;
 
     if (type === "image") {
-      const abortController = new AbortController();
-      // Set timeout cho image generation request
-      const timeoutId = setTimeout(() => abortController.abort(), 25000);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       try {
         const response = await openai.images.generate({
@@ -25,7 +23,7 @@ export async function POST(req) {
           n: 1,
           size: "1024x1024",
         }, {
-          signal: abortController.signal,
+          signal: controller.signal,
         });
 
         clearTimeout(timeoutId);
@@ -57,53 +55,66 @@ export async function POST(req) {
       }
     }
 
-    // Regular text chat với timeout ngắn hơn
-    const chatResponse = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You are XWizard AI, an AI assistant specializing in blockchain, cryptocurrency, and XRP technology. Be concise and helpful.",
-        },
-        { role: "user", content: message },
-      ],
-      max_tokens: 500,
-      temperature: 0.7,
-      timeout: 15000, // 15 seconds timeout
-    });
+    // Regular text chat với AbortController
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-    return new Response(
-      JSON.stringify({
-        type: "text",
-        message: chatResponse.choices[0].message.content,
-      }),
-      {
-        status: 200,
-        headers: {
-          "Content-Type": "application/json",
-          "Cache-Control": "no-cache, no-store, must-revalidate",
-        },
+    try {
+      const chatResponse = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are XWizard AI, an AI assistant specializing in blockchain, cryptocurrency, and XRP technology. Be concise and helpful.",
+          },
+          { role: "user", content: message },
+        ],
+        max_tokens: 500,
+        temperature: 0.7,
+      }, {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      return new Response(
+        JSON.stringify({
+          type: "text",
+          message: chatResponse.choices[0].message.content,
+        }),
+        {
+          status: 200,
+          headers: {
+            "Content-Type": "application/json",
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+          },
+        }
+      );
+    } catch (error) {
+      if (error.name === 'AbortError') {
+        return new Response(
+          JSON.stringify({
+            error: "Request took too long. Please try again.",
+          }),
+          { status: 408 }
+        );
       }
-    );
+      throw error;
+    }
   } catch (error) {
     console.error("OpenAI API error:", error);
 
-    // Return user-friendly error messages
-    let errorMessage = "Failed to get response from AI";
-    let statusCode = 500;
-
-    if (error.code === 'ETIMEDOUT' || error.code === 'ESOCKETTIMEDOUT') {
-      errorMessage = "Request timed out. Please try again.";
-      statusCode = 408;
-    }
-
+    const errorMessage = error.name === 'AbortError' 
+      ? "Request timed out. Please try again."
+      : "Failed to get response from AI";
+    
     return new Response(
       JSON.stringify({
         error: errorMessage,
       }),
       {
-        status: statusCode,
+        status: error.name === 'AbortError' ? 408 : 500,
         headers: {
           "Content-Type": "application/json",
         },
