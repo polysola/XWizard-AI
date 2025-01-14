@@ -22,8 +22,8 @@ const ChatMessage = ({ message, type, isUser, imageUrl }) => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`max-w-[85%] rounded-2xl px-4 py-2 ${isUser
-                        ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
-                        : 'bg-gray-800 text-gray-100'
+                    ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                    : 'bg-gray-800 text-gray-100'
                     }`}
             >
                 {type === 'image' ? (
@@ -147,7 +147,7 @@ const ChatInterface = () => {
                                 <div>
                                     <h3 className="text-lg font-semibold text-white flex items-center gap-2">
                                         <Bot size={20} className="text-purple-500" />
-                                        XWizard AI
+                                        XMagic AI
                                     </h3>
                                     <p className="text-xs text-gray-400">AI Assistant & Image Generator</p>
                                 </div>
@@ -172,7 +172,7 @@ const ChatInterface = () => {
                                         className="text-center text-gray-500 py-8"
                                     >
                                         <Bot size={40} className="mx-auto mb-4 text-purple-500" />
-                                        <p className="text-sm">Hi! I&apos;m XWizard AI. How can I help you today?</p>
+                                        <p className="text-sm">Hi! I&apos;m XMagic AI. How can I help you today?</p>
                                     </motion.div>
                                 )}
                                 {messages.map((msg, index) => (

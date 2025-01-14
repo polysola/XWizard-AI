@@ -14,7 +14,7 @@ const AboutDetails = () => {
             Next-Generation AI on XRP Ledger
           </h2>
           <p className="font-light text-sm sm:text-base md:text-lg text-gray-200 leading-relaxed">
-            XWizard AI revolutionizes the blockchain landscape by seamlessly integrating
+            XMagic AI revolutionizes the blockchain landscape by seamlessly integrating
             cutting-edge artificial intelligence with the XRP Ledger. Our platform
             leverages advanced machine learning algorithms to provide real-time analytics,
             predictive modeling, and automated trading strategies. Built with a

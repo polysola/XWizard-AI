@@ -66,7 +66,7 @@ export async function POST(req) {
           {
             role: "system",
             content:
-              "You are XWizard AI, an AI assistant specializing in blockchain, cryptocurrency, and XRP technology. Be concise and helpful.",
+              "You are XMagic AI, an AI assistant specializing in blockchain, cryptocurrency, and XRP technology. Be concise and helpful.",
           },
           { role: "user", content: message },
         ],

@@ -113,13 +113,13 @@ export const BtnList = [
   },
   {
     label: "X",
-    link: "https://x.com/XWizardAI_XRPL",
+    link: "https://x.com/XMagicAI_XRP",
     icon: "twitter",
     newTab: true,
   },
   {
     label: "Telegram",
-    link: "https://t.me/XWizardAI_Portal",
+    link: "https://t.me/XMagicAI_Portal",
     icon: "resume",
     newTab: true,
   },

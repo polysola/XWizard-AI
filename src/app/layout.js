@@ -11,8 +11,8 @@ const inter = Inter({
 
 export const metadata = {
   title: {
-    template: "XWizard AI",
-    default: "XWizard AI",
+    template: "XMagic AI",
+    default: "XMagic AI",
   },
   description: "Next-generation multifunctional AI integrated on XRPL",
 };
