@@ -92,7 +92,7 @@ export const projectsData = [
 export const BtnList = [
   {
     label: "Buy Now",
-    link: "https://firstledger.net",
+    link: "https://firstledger.net/token/rBmrW5ftpzZRLKY4qYgTGxboMSS4gkd5qQ/4D41474943000000000000000000000000000000",
     icon: "home",
     newTab: true,
   },
